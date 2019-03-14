@@ -23,7 +23,8 @@ server <- function(){
     }
 
     q = primNumber
-    serv_N = p*q;
+    
+    serv_N = p*q
 
     fiN = (p-1)*(q-1)
     
@@ -34,13 +35,19 @@ server <- function(){
         }
     }
 
+    rm(primNumber)
+    rm(isPrime)
+    rm(i)
+
     while(TRUE){
         writeLines("Listening...")
         con <- socketConnection(host="localhost", port = 6011, blocking=TRUE, server=TRUE, open="r+")
-        data <- readLines(con, 1)
-        print(data)
-        response <- toupper(data) 
-        writeLines(response, con) 
+
+        cli_n <- readLines(con, 1)
+        cli_e <- readLines(con, 1)
+        print(cli_n)
+        print(cli_e)
+
         close(con)
     }
 }
