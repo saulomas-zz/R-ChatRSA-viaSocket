@@ -1,9 +1,9 @@
-require(svSocket)
 require(primes)
 require(FRACTION)
 
 client <- function(){
     #Geração das Chaves Públicas e Privadas
+    print("Geracao da Chave Publica")
     isPrime = FALSE
     while(isPrime == FALSE) {
         primNumber = sample(1:99,1)
@@ -24,14 +24,14 @@ client <- function(){
 
     q = primNumber
     
-    cli_N = p*q
+    n_Cli = p*q
 
     fiN = (p-1)*(q-1)
     
-    cli_E = 0
+    e_Cli = 0
     for (i in 2:fiN) {
         if (gcd(fiN, i) == 1) {
-            cli_E = i
+            e_Cli = i
             break
         }
     }
@@ -39,12 +39,32 @@ client <- function(){
     rm(primNumber)
     rm(isPrime)
     rm(i)
+    #--------------------------------------------------------------------
+
+    print("Troca de chaves")
+    #kpuc = c(n_Cli,e_Cli)
+    kpuc = c(toString(n_Cli), toString(e_Cli))
+    con <- socketConnection(host="localhost", port=666, blocking=TRUE, server=FALSE, open="r+")
+
+    # enviar a chave publica do cliente
+    write_resp = writeLines(kpuc, con, useBytes = TRUE)
+    # receber a chave publica do servidor
+    kpus = readLines(con,2)
+    print(kpus)
+
+    close(con)
 
     while(TRUE){
-        con = socketConnection(host="localhost", port = 6011, blocking=TRUE, server=FALSE, open="r+")
+        con = socketConnection(host="localhost", port = 666, blocking=TRUE, server=FALSE, open="r+")
 
-        cli_N_resp = writeLines(cli_N, con)
-        cli_E_respo = writeLines(cli_E, con)
+        # cliente captura mensagem da entrada padrao (teclado)
+        f <- file("stdin")
+        open(f)
+        writeLines("msg", sep=": ")
+        msg <- readLines(f, n=1)
+        if(tolower(msg)=="q"){
+            break
+        }
 
         close(con)    
     }
