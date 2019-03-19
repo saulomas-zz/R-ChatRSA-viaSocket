@@ -1,8 +1,8 @@
-require(primes)
+require(gmp)
 require(FRACTION)
 require(stringi)
 
-client <- function(){
+client <- function() {
     #--------------------------------------------------------------------
     #Geração das Chaves Públicas e Privadas
     maxPrimeNumber = 99
@@ -20,7 +20,7 @@ client <- function(){
     isPrime = FALSE
     while(isPrime == FALSE) {
         primNumber = sample(1:maxPrimeNumber,1)
-        if (primNumber != cli_p && primes::is_prime(primNumber)) {
+        if (primNumber != cli_p && isprime(primNumber) == 2) {
             isPrime = TRUE
         }
     }
@@ -91,11 +91,15 @@ client <- function(){
         write_resp = writeLines(paste(as.character(msgCrypt), collapse = ","), con)
 
         # cliente recebe mensagem enviada pelo servidor
-        data = readLines(con, 1)
+        msgCrypt = readLines(con, 1)
+        msgCrypt = as.bigz(unlist(strsplit(msgCrypt, split=",")))
         
         # cliente decriptografa a mensagem e a mostra na tela
         # fazer aqui a decriptografia
-        msgDecrypt = (msgCrypt ^ cli_d) %% cli_n
+        resPotencia = msgCrypt ^ as.bigz(cli_d)
+        msgDecrypt = resPotencia %% cli_n
+
+        msgDecrypt = as.integer(msgDecrypt)
         msg = intToUtf8(msgDecrypt)
         print(msg)
 

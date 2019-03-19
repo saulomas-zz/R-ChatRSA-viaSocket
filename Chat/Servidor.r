@@ -1,4 +1,4 @@
-require(primes)
+require(gmp)
 require(FRACTION)
 require(stringi)
 
@@ -10,7 +10,7 @@ server <- function() {
     isPrime = FALSE
     while(isPrime == FALSE) {
         primNumber = sample(1:maxPrimeNumber,1)
-        if (primes::is_prime(primNumber)) {
+        if (isprime(primNumber) == 2) {
             isPrime = TRUE
         }
     }
@@ -20,7 +20,7 @@ server <- function() {
     isPrime = FALSE
     while(isPrime == FALSE) {
         primNumber = sample(1:maxPrimeNumber,1)
-        if (primNumber != serv_p && primes::is_prime(primNumber)) {
+        if (primNumber != serv_p && isprime(primNumber) == 2) {
             isPrime = TRUE
         }
     }
@@ -74,21 +74,23 @@ server <- function() {
 
     while(TRUE){
         writeLines("Listening...")
-        con <- socketConnection(host="localhost", port = 666, blocking=TRUE, server=TRUE, open="r+")
+        con = socketConnection(host="localhost", port = 666, blocking=TRUE, server=TRUE, open="r+")
 
         # servidor recebe mensagem enviada pelo cliente
         msgCrypt = readLines(con, 1)
-        msgCrypt = as.integer(unlist(strsplit(msgCrypt, split=",")))
+        msgCrypt = as.bigz(unlist(strsplit(msgCrypt, split=",")))
 
         # servidor decriptografa a mensagem e a mostra na tela
         # fazer aqui a decriptografia
-        msgDecrypt = (msgCrypt ^ serv_d) %% serv_n
+        resPotencia = msgCrypt ^ as.bigz(serv_d)
+        msgDecrypt = resPotencia %% serv_n
         
+        msgDecrypt = as.integer(msgDecrypt)
         msg = intToUtf8(msgDecrypt)
         print(msg)
         
         # servidor captura mensagem da entrada padrao (teclado)
-        f <- file("stdin")
+        f = file("stdin")
         open(f)
         writeLines("msg", sep=": ")
         msg <- readLines(f, n=1)
