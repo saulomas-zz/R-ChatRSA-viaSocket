@@ -1,3 +1,4 @@
+#Pacotes usados e comandos para instalação dos mesmos:
 #install.packages('gmp', repos='http://cran.us.r-project.org')
 #install.packages('stringi', repos='http://cran.us.r-project.org')
 
