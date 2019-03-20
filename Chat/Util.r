@@ -4,12 +4,13 @@
 require(gmp)
 require(stringi)
 
-maxPrimeNumber = 999
+minPrimeNumber = 12  #O limite minimo de 12 é para "n" poder considerar pelo menos os caracteres alfabeticos que vão ate 122 em ASCII
+maxPrimeNumber = 999 #A partir do 4º digito o processamento começa ficar mais lento para textos maiores
 
 getChaveP = function() {
     isPrime = FALSE
     while(isPrime == FALSE) {
-        primNumber = sample(128:maxPrimeNumber,1)
+        primNumber = sample(minPrimeNumber:maxPrimeNumber,1) 
         if (isprime(primNumber) == 2) {
             isPrime = TRUE
         }
@@ -21,7 +22,7 @@ getChaveP = function() {
 getChaveQ = function(p) {
     isPrime = FALSE
     while(isPrime == FALSE) {
-        primNumber = sample(128:maxPrimeNumber,1)
+        primNumber = sample(minPrimeNumber:maxPrimeNumber,1)
         if (primNumber != p && isprime(primNumber) == 2) {
             isPrime = TRUE
         }
@@ -35,7 +36,7 @@ getChaveN = function(p, q) {
 }
 
 getChaveNFi = function(p, q) {
-    return((p-1)*(q-1))
+    return((p - 1) * (q - 1))
 }
 
 getChaveE = function(nFi) {
@@ -53,7 +54,7 @@ getChaveE = function(nFi) {
 getChaveD = function(nFi, e) {
     serv_d = 1
     repeat {
-        if (serv_d < nFi && (serv_d*e) %% nFi == 1) {
+        if (serv_d < nFi && (serv_d * e) %% nFi == 1) {
             break
         }
         serv_d = serv_d + 1
