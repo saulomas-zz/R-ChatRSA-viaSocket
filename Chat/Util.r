@@ -1,3 +1,6 @@
+#install.packages('gmp', repos='http://cran.us.r-project.org')
+#install.packages('stringi', repos='http://cran.us.r-project.org')
+
 require(gmp)
 require(stringi)
 

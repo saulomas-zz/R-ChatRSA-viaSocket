@@ -1,22 +1,18 @@
-#install.packages('gmp', repos='http://cran.us.r-project.org')
-#install.packages('stringi', repos='http://cran.us.r-project.org')
-
-require(gmp)
-require(stringi)
-
 source("Util.r")
+#O arquivo acima localizado na mesma pasta desse arquivo contém as funções:
+#=> De geração de chave (getChaveP, getChaveQ, getChaveN, getChaveNFi, getChaveE, getChaveD)
+#=> De criptografia e descriptografia (toMsgCrypt, toMsgDecrypt)
 
 client <- function() {
     #--------------------------------------------------------------------
     #Geração das Chaves Públicas e Privadas    
-
+    print("Geracao da Chave Publica")
     cli_p = getChaveP()
     cli_q = getChaveQ(cli_p)
     cli_n = getChaveN(cli_p, cli_q)
     cli_n_fi = getChaveNFi(cli_p, cli_q)
     cli_e = getChaveE(cli_n_fi)
-    cli_d = getChaveD(cli_n_fi, cli_e)
-    
+    cli_d = getChaveD(cli_n_fi, cli_e)    
     #--------------------------------------------------------------------
     print("Troca de chaves")
     #kpuc = c(cli_n,cli_e)
