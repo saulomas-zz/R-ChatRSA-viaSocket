@@ -12,9 +12,8 @@ getChaveP = function() {
     isPrime = FALSE
     while(isPrime == FALSE) {
         primNumber = sample(minPrimeNumber:maxPrimeNumber,1) 
-        if (isprime(primNumber) == 2) {
-            isPrime = TRUE
-        }
+
+        isPrime = isprime(primNumber) == 2
     }
     
     return(primNumber)
@@ -24,9 +23,8 @@ getChaveQ = function(p) {
     isPrime = FALSE
     while(isPrime == FALSE) {
         primNumber = sample(minPrimeNumber:maxPrimeNumber,1)
-        if (primNumber != p && isprime(primNumber) == 2) {
-            isPrime = TRUE
-        }
+
+        isPriime = primNumber != p && isprime(primNumber) == 2
     }
 
     return(primNumber)
