@@ -5,12 +5,12 @@ require(stringi)
 client <- function() {
     #--------------------------------------------------------------------
     #Geração das Chaves Públicas e Privadas
-    maxPrimeNumber = 99
+    maxPrimeNumber = 999
     print("Geracao da Chave Publica")
     isPrime = FALSE
     while(isPrime == FALSE) {
-        primNumber = sample(1:maxPrimeNumber,1)
-        if (primes::is_prime(primNumber)) {
+        primNumber = sample(12:maxPrimeNumber,1) #Usei minimo 12 para contemplar todos os 127 primeiros caracteres da tabela ASCII
+        if (isprime(primNumber) == 2) {
             isPrime = TRUE
         }
     }
@@ -19,7 +19,7 @@ client <- function() {
 
     isPrime = FALSE
     while(isPrime == FALSE) {
-        primNumber = sample(1:maxPrimeNumber,1)
+        primNumber = sample(12:maxPrimeNumber,1) #Usei minimo 12 para contemplar todos os 127 primeiros caracteres da tabela ASCII
         if (primNumber != cli_p && isprime(primNumber) == 2) {
             isPrime = TRUE
         }
