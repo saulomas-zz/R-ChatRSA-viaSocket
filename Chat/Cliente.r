@@ -1,51 +1,22 @@
+#install.packages('gmp', repos='http://cran.us.r-project.org')
+#install.packages('stringi', repos='http://cran.us.r-project.org')
+
 require(gmp)
-require(FRACTION)
 require(stringi)
+
+source("Util.r")
 
 client <- function() {
     #--------------------------------------------------------------------
-    #Geração das Chaves Públicas e Privadas
-    maxPrimeNumber = 999
-    print("Geracao da Chave Publica")
-    isPrime = FALSE
-    while(isPrime == FALSE) {
-        primNumber = sample(12:maxPrimeNumber,1) #Usei minimo 12 para contemplar todos os 127 primeiros caracteres da tabela ASCII
-        if (isprime(primNumber) == 2) {
-            isPrime = TRUE
-        }
-    }
+    #Geração das Chaves Públicas e Privadas    
+
+    cli_p = getChaveP()
+    cli_q = getChaveQ(cli_p)
+    cli_n = getChaveN(cli_p, cli_q)
+    cli_n_fi = getChaveNFi(cli_p, cli_q)
+    cli_e = getChaveE(cli_n_fi)
+    cli_d = getChaveD(cli_n_fi, cli_e)
     
-    cli_p = primNumber
-
-    isPrime = FALSE
-    while(isPrime == FALSE) {
-        primNumber = sample(12:maxPrimeNumber,1) #Usei minimo 12 para contemplar todos os 127 primeiros caracteres da tabela ASCII
-        if (primNumber != cli_p && isprime(primNumber) == 2) {
-            isPrime = TRUE
-        }
-    }
-
-    cli_q = primNumber
-    
-    cli_n = cli_p*cli_q
-
-    cli_n_fi = (cli_p-1)*(cli_q-1)
-    
-    cli_e = 0
-    for (i in 2:cli_n_fi) {
-        if (gcd(cli_n_fi, i) == 1) {
-            cli_e = i
-            break
-        }
-    }
-
-    cli_d = 1
-    repeat {
-        if (cli_d < cli_n_fi && (cli_d*cli_e) %% cli_n_fi == 1) {
-            break
-        }
-        cli_d = cli_d + 1
-    }
     #--------------------------------------------------------------------
     print("Troca de chaves")
     #kpuc = c(cli_n,cli_e)
@@ -64,10 +35,6 @@ client <- function() {
 
     close(con)
     #--------------------------------------------------------------------
-    rm(maxPrimeNumber)
-    rm(primNumber)
-    rm(isPrime)
-    rm(i)
     rm(kpuc)
     rm(kpus)
     #--------------------------------------------------------------------
@@ -85,22 +52,15 @@ client <- function() {
         }
         
         # cliente criptografa a mensagem e a envia para o servidor
-        # fazer aqui a criptografia
-        msgUTF8 = utf8ToInt(stringi::stri_enc_toascii(msg))
-        msgCrypt = (msgUTF8 ^ serv_e) %% serv_n
-        write_resp = writeLines(paste(as.character(msgCrypt), collapse = ","), con)
+        msgCrypt = toMsgCrypt(msg, serv_e, serv_n)
+        write_resp = writeLines(msgCrypt, con)
 
         # cliente recebe mensagem enviada pelo servidor
         msgCrypt = readLines(con, 1)
-        msgCrypt = as.bigz(unlist(strsplit(msgCrypt, split=",")))
         
         # cliente decriptografa a mensagem e a mostra na tela
         # fazer aqui a decriptografia
-        resPotencia = msgCrypt ^ as.bigz(cli_d)
-        msgDecrypt = resPotencia %% cli_n
-
-        msgDecrypt = as.integer(msgDecrypt)
-        msg = intToUtf8(msgDecrypt)
+        msg = toMsgDecrypt(msgCrypt, cli_d, cli_n)
         print(msg)
 
         close(con)    
