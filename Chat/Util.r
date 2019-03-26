@@ -62,21 +62,30 @@ getChaveD = function(nFi, e) {
 }
 
 toMsgCrypt = function(msg, e, n) {
+    #stri_enc_toascii => converte o texto em ASCII (que consistem em bytes não superiores a 127)
+    #utf8ToInt => converte o texto ASCII acima para um vetor de inteiros do Unicode
     msgUTF8 = utf8ToInt(stringi::stri_enc_toascii(msg))
 
+    #Onde realmente é feita a CRIPTOGRAFIA da mensagem
     resPotencia = msgUTF8 ^ as.bigz(e)
     msgCrypt = resPotencia %% n
     
-    return(paste(as.character(msgCrypt), collapse = ","))
+    #paste => transforma o array de inteiro, em um array unico de caracteres separados por vírgula, para facilitar na passagem de informação no Socket e o retorna
+    return(paste(msgCrypt, collapse = ","))
 }
 
 toMsgDecrypt = function(msgCrypt, d, n) {
+    #strsplit, unlist => transforma a informação separada por virgula recebida em um array
+    #as.bigz => converte os valores em bigz
     msgCrypt = as.bigz(unlist(strsplit(msgCrypt, split=",")))
 
+    #Onde realmente é feita a DESCRIPTOGRAFIA da mensagem
     resPotencia = msgCrypt ^ as.bigz(d)
     msgDecrypt = resPotencia %% n
 
+    #as.integer => transforma o vetor do tipo bigz para o tipo inteiro que posteriormente será transformado em Unicode
     msgDecrypt = as.integer(msgDecrypt)
 
-    return(msg = intToUtf8(msgDecrypt))
+    #intToUtf8 => converte o vetor de inteiro para um texto Unicode e o retorna
+    return(intToUtf8(msgDecrypt))
 }
