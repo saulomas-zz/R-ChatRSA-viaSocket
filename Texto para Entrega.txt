@@ -1,9 +1,0 @@
-Boa noite Professor
-
-Meu grupo sou apenas Eu 
-
-Como previamente explicado, o arquivo "Util.r" contem funções criadas por mim para atender ao Cliente.r e Servidor.r. 
-
-Esse arquivo a mais apenas centraliza as funções repetidas evitando redundância. 
-
-E foi referênciada no Cliente e Servidor através da linha => source("Util.r") <= na primeira linha de cada arquivo
