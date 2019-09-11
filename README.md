@@ -1,4 +1,4 @@
-# R-Chat_RSA_viaSocket
+# R-ChatRSA-viaSocket
 
 Para o funcionamento correto desse projeto é necessário instalar a biblioteca **gmp** e **stringi**, executando no console do **R** ou **RStudio** os comandos abaixo:
 
