@@ -2,7 +2,7 @@
 
 Esse trabalho consistiu na criação de aplicações cliente/servidor que troquem mensagens utilizando o algoritmo de criptografia **<a href="https://pt.wikipedia.org/wiki/RSA_(sistema_criptogr%C3%A1fico)">RSA</a>** em **<a href="https://www.r-project.org/">R</a>** via **<a href="https://pt.wikipedia.org/wiki/Soquete_de_rede">Socket</a>**
 
-## Instalação
+## Bibliotecas necessárias
 
 Para o funcionamento correto desse projeto é necessário instalar a biblioteca **gmp** e **stringi**, executando no console do **<a href="https://www.r-project.org/">R</a>** ou **<a href="https://www.rstudio.com/">RStudio</a>** os comandos abaixo:
 ```
